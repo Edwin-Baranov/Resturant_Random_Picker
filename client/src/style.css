@@ -1,0 +1,49 @@
+body {
+  background-color: brown;
+}
+
+h1 {
+  background-color: #4a1212;
+  margin: 0;
+  color: white;
+  padding-left: 15px;
+}
+
+h3 {
+  background-color: #4a1212;
+  margin: 0;
+  color: #cccccc;
+  padding-left: 20px;
+}
+
+#app {
+  width: 500px;
+  margin: auto;
+}
+
+#locationSearch {
+  margin: auto;
+  background-color: #4a1212;
+  padding: 10px;
+}
+
+#primaryDisplay {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#currentSelection {
+  background-color: #4a1212;
+  padding: 10px;
+}
+
+#currentSelection > p {
+  font-size: 20px;
+  color: white;
+  cursor: pointer;
+}
+
+#currentSelection > p:hover {
+  color: gold;
+}
