@@ -12,9 +12,4 @@ Instructions to run:
 * run `npm start`
 * open `localhost:3000`
 
-<img srcset="https://i.imgur.com/B8dclea.png 120w,
-             https://i.imgur.com/B8dclea.png 193w,
-            https://i.imgur.com/B8dclea.png 278w"
-     sizes="(max-width: 710px) 120px,
-            (max-width: 991px) 193px,
-            278px">
+<img src="https://i.imgur.com/B8dclea.png"/>
