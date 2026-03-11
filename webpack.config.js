@@ -1,6 +1,6 @@
 const path = require('path');
-var SRC_DIR = path.join(__dirname, 'client', 'src');
-var DIST_DIR = path.join(__dirname, 'client', 'dist');
+const SRC_DIR = path.join(__dirname, 'client', 'src');
+const DIST_DIR = path.join(__dirname, 'client', 'dist');
 
 const HtmlWebPackPlugin = require("html-webpack-plugin");
 const htmlPlugin = new HtmlWebPackPlugin({

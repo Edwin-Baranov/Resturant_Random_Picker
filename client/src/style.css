@@ -1,49 +1,122 @@
+* {
+  box-sizing: border-box;
+}
+
 body {
-  background-color: brown;
+  background-color: #3e0d0d;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  padding: 0;
 }
 
 h1 {
   background-color: #4a1212;
   margin: 0;
   color: white;
-  padding-left: 15px;
+  padding: 15px;
+  text-align: center;
 }
 
 h3 {
   background-color: #4a1212;
   margin: 0;
   color: #cccccc;
-  padding-left: 20px;
+  padding: 5px 20px 15px;
+  text-align: center;
+  font-weight: normal;
 }
 
 #app {
-  width: 500px;
+  max-width: 550px;
+  width: 100%;
   margin: auto;
 }
 
 #locationSearch {
-  margin: auto;
   background-color: #4a1212;
-  padding: 10px;
+  padding: 10px 15px 15px;
+  display: flex;
+  gap: 8px;
+}
+
+#locationSearch input[type='text'] {
+  flex: 1;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+#locationSearch button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  background-color: #d4a017;
+  color: #333;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+#locationSearch button:hover:not(:disabled) {
+  background-color: #e6b422;
+}
+
+#locationSearch button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.error-message {
+  background-color: #ff4444;
+  color: white;
+  padding: 10px 15px;
+  margin: 0;
+  text-align: center;
 }
 
 #primaryDisplay {
   display: block;
-  margin-left: auto;
-  margin-right: auto;
+  width: 100%;
+  max-width: 500px;
+  margin: 10px auto;
 }
 
 #currentSelection {
   background-color: #4a1212;
-  padding: 10px;
+  padding: 10px 15px;
+  text-align: center;
 }
 
 #currentSelection > p {
-  font-size: 20px;
+  font-size: 18px;
   color: white;
   cursor: pointer;
+  margin: 5px 0;
 }
 
-#currentSelection > p:hover {
+#currentSelection > p:first-child:hover {
   color: gold;
+}
+
+#currentSelection > .rating {
+  font-size: 14px;
+  color: #cccccc;
+  cursor: default;
+}
+
+#currentSelection button {
+  margin-top: 8px;
+  padding: 8px 20px;
+  border: none;
+  border-radius: 4px;
+  background-color: #d4a017;
+  color: #333;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+#currentSelection button:hover {
+  background-color: #e6b422;
 }
