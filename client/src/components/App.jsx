@@ -48,8 +48,7 @@ const App = () => {
       setCurrentSelection(data[Math.floor(Math.random() * data.length)]);
       setAppState('found');
     } catch (err) {
-      const message =
-        err.response?.data?.error || 'Something went wrong. Please try again.';
+      const message = err.response?.data?.error || 'Something went wrong. Please try again.';
       setError(message);
       setAppState('idle');
     }
@@ -65,9 +64,7 @@ const App = () => {
   }
 
   function handleCycle() {
-    setCurrentSelection(
-      placesList[Math.floor(Math.random() * placesList.length)]
-    );
+    setCurrentSelection(placesList[Math.floor(Math.random() * placesList.length)]);
   }
 
   return (
@@ -93,12 +90,10 @@ const App = () => {
 
       {currentSelection && (
         <div id="currentSelection">
-          <p onClick={handleOpenInMaps}>
-            Current Selection: {currentSelection.name}
-          </p>
+          <p onClick={handleOpenInMaps}>Current Selection: {currentSelection.name}</p>
           <p className="rating">
-            Rating: {currentSelection.rating ?? 'N/A'} |
-            Total ratings: {currentSelection.user_ratings_total ?? 'N/A'}
+            Rating: {currentSelection.rating ?? 'N/A'} | Total ratings:{' '}
+            {currentSelection.user_ratings_total ?? 'N/A'}
           </p>
           <button onClick={handleCycle}>Pick Another</button>
         </div>
