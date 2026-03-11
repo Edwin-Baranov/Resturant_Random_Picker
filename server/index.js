@@ -20,14 +20,14 @@ app.get('/api/config', (req, res) => {
 });
 
 app.get('/api/search', async (req, res) => {
-  const { address } = req.query;
+  const { address, lat, lng, radius } = req.query;
 
   if (!address || !address.trim()) {
     return res.status(400).json({ error: 'Address query parameter is required' });
   }
 
   try {
-    const results = await api.searchRestaurants(address);
+    const results = await api.searchRestaurants(address, { lat, lng, radius });
     if (!results || results.length === 0) {
       return res.status(404).json({ error: 'No restaurants found near that address' });
     }

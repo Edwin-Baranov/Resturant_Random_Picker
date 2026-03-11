@@ -11,6 +11,7 @@ const FIELD_MASK = [
   'places.userRatingCount',
   'places.businessStatus',
   'places.googleMapsUri',
+  'places.primaryTypeDisplayName',
 ].join(',');
 
 function getApiKey() {
@@ -30,24 +31,31 @@ function deduplicate(places) {
   return Object.values(uniqueByName);
 }
 
-async function searchRestaurants(addressString) {
+async function searchRestaurants(addressString, { lat, lng, radius } = {}) {
   const apiKey = getApiKey();
 
-  const response = await axios.post(
-    PLACES_API_URL,
-    {
-      textQuery: `restaurants near ${addressString}`,
-      includedType: 'restaurant',
-      pageSize: 20,
-    },
-    {
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Goog-Api-Key': apiKey,
-        'X-Goog-FieldMask': FIELD_MASK,
+  const body = {
+    textQuery: `restaurants near ${addressString}`,
+    includedType: 'restaurant',
+    pageSize: 20,
+  };
+
+  if (lat != null && lng != null && radius != null) {
+    body.locationBias = {
+      circle: {
+        center: { latitude: Number(lat), longitude: Number(lng) },
+        radius: Number(radius),
       },
-    }
-  );
+    };
+  }
+
+  const response = await axios.post(PLACES_API_URL, body, {
+    headers: {
+      'Content-Type': 'application/json',
+      'X-Goog-Api-Key': apiKey,
+      'X-Goog-FieldMask': FIELD_MASK,
+    },
+  });
 
   const places = response.data.places || [];
   return deduplicate(places);
