@@ -1,15 +1,19 @@
-# Resturant Random Picker: MVP_Project
+# Restaurant Random Picker
 
-This is a web app project created using React, Node.js, expressJS that will search a given area for all food establishments using Google's Places api, filter out any duplicate franchised entries and display a randomly pick one with the Google Maps api.
+A web app built with React 18, Node.js, and Express that searches a given area for restaurants using Google's Places API, filters out duplicates, and randomly picks one — displayed with a Google Static Maps image.
 
-This project was part of an assignment for Hack Reactor where we were tasked to create a product within a limited time and only focus on making the Minimum Viable Product. The amount of allocated time for this project was 2 days.
+Originally created as a Hack Reactor MVP assignment (2-day time limit), now modernized with updated dependencies, proper API key security, async/await patterns, and responsive styling.
 
-Instructions to run:
-* Clone the repository to your local machine
-* run `npm install`
-* add your Google Maps api to the `tokens.js` file
-* run `npm run build`
-* run `npm start`
-* open `localhost:3000`
+## Setup
+
+1. Clone the repository
+2. Run `npm install`
+3. Copy `.env.example` to `.env` and add your Google API key:
+   ```
+   GOOGLE_API_KEY=your_key_here
+   ```
+4. Run `npm run build`
+5. Run `npm start`
+6. Open `http://localhost:3000`
 
 <img src="https://i.imgur.com/B8dclea.png"/>
