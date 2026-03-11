@@ -75,6 +75,73 @@ h3 {
   cursor: not-allowed;
 }
 
+.filter-wrapper {
+  position: relative;
+  display: flex;
+}
+
+.filter-btn {
+  background-color: transparent;
+  color: #ccc;
+  font-size: 18px;
+  padding: 0 10px;
+  border: 1px solid #666;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.filter-btn:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+#filterDropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 6px;
+  background-color: #4a1212;
+  padding: 0 16px;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  z-index: 100;
+  white-space: nowrap;
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition:
+    max-height 0.15s ease,
+    opacity 0.06s ease 0.09s,
+    padding 0.15s ease;
+}
+
+#filterDropdown.open {
+  max-height: 100px;
+  opacity: 1;
+  padding: 12px 16px;
+  transition:
+    max-height 0.15s ease,
+    opacity 0.06s ease 0.02s,
+    padding 0.15s ease;
+}
+
+#filterDropdown label {
+  color: #ccc;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+#filterDropdown select {
+  padding: 4px 8px;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  background-color: #fff;
+  cursor: pointer;
+}
+
 .error-message {
   background-color: #ff4444;
   color: white;
