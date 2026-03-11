@@ -18,9 +18,7 @@ describe('filterAndDeduplicate', () => {
   });
 
   it('deduplicates by name, keeping the latest entry', () => {
-    const existing = [
-      { name: 'Burger King', rating: 3.0, business_status: 'OPERATIONAL' },
-    ];
+    const existing = [{ name: 'Burger King', rating: 3.0, business_status: 'OPERATIONAL' }];
     const newResults = [
       { name: 'Burger King', rating: 4.5, business_status: 'OPERATIONAL' },
       { name: 'Taco Bell', rating: 3.8, business_status: 'OPERATIONAL' },
@@ -34,9 +32,7 @@ describe('filterAndDeduplicate', () => {
   });
 
   it('returns empty array when all are non-operational', () => {
-    const newResults = [
-      { name: 'Gone', business_status: 'CLOSED_PERMANENTLY' },
-    ];
+    const newResults = [{ name: 'Gone', business_status: 'CLOSED_PERMANENTLY' }];
     const result = filterAndDeduplicate(newResults, []);
     assert.equal(result.length, 0);
   });
@@ -47,9 +43,7 @@ describe('filterAndDeduplicate', () => {
   });
 
   it('preserves existing results when new results are empty', () => {
-    const existing = [
-      { name: 'Pizza Hut', business_status: 'OPERATIONAL' },
-    ];
+    const existing = [{ name: 'Pizza Hut', business_status: 'OPERATIONAL' }];
     const result = filterAndDeduplicate([], existing);
     assert.equal(result.length, 1);
     assert.equal(result[0].name, 'Pizza Hut');

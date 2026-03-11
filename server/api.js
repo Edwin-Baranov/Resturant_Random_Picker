@@ -27,9 +27,7 @@ async function getCoordinatesFromSearch(addressString) {
 }
 
 function filterAndDeduplicate(newResults, existingResults) {
-  const operational = newResults.filter(
-    (place) => place.business_status === 'OPERATIONAL'
-  );
+  const operational = newResults.filter((place) => place.business_status === 'OPERATIONAL');
   const combined = existingResults.concat(operational);
 
   const uniqueByName = {};

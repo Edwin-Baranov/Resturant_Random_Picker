@@ -2,17 +2,17 @@ const path = require('path');
 const SRC_DIR = path.join(__dirname, 'client', 'src');
 const DIST_DIR = path.join(__dirname, 'client', 'dist');
 
-const HtmlWebPackPlugin = require("html-webpack-plugin");
+const HtmlWebPackPlugin = require('html-webpack-plugin');
 const htmlPlugin = new HtmlWebPackPlugin({
-  template: "client/src/index.html",
-  filename: "./index.html"
+  template: 'client/src/index.html',
+  filename: './index.html',
 });
 
 module.exports = {
   entry: `${SRC_DIR}/index.jsx`,
   output: {
     path: DIST_DIR,
-    filename: "bundle.js"
+    filename: 'bundle.js',
   },
   plugins: [htmlPlugin],
   module: {
@@ -21,13 +21,13 @@ module.exports = {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
         use: {
-          loader: "babel-loader"
-        }
+          loader: 'babel-loader',
+        },
       },
       {
         test: /\.css$/i,
-        use: ["style-loader", "css-loader"],
-      }
-    ]
-  }
+        use: ['style-loader', 'css-loader'],
+      },
+    ],
+  },
 };
