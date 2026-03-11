@@ -75,11 +75,9 @@ h3 {
   text-align: center;
 }
 
-#primaryDisplay {
-  display: block;
+#mapContainer {
   width: 100%;
-  max-width: 500px;
-  margin: 10px auto;
+  height: 400px;
 }
 
 #currentSelection {

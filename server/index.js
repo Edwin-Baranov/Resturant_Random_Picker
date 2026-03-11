@@ -11,6 +11,14 @@ const app = express();
 app.use(express.json());
 app.use(express.static(DIST_DIR));
 
+app.get('/api/config', (req, res) => {
+  const key = process.env.GOOGLE_API_KEY;
+  if (!key) {
+    return res.status(500).json({ error: 'API key not configured' });
+  }
+  res.json({ mapsApiKey: key });
+});
+
 app.get('/api/search', async (req, res) => {
   const { address } = req.query;
 
@@ -19,30 +27,14 @@ app.get('/api/search', async (req, res) => {
   }
 
   try {
-    const results = await api.getRestaurantsNearAddress(address);
-    if (!results) {
-      return res.status(404).json({ error: 'No location found for that address' });
+    const results = await api.searchRestaurants(address);
+    if (!results || results.length === 0) {
+      return res.status(404).json({ error: 'No restaurants found near that address' });
     }
     res.json(results);
   } catch (err) {
-    console.error('Search error:', err.message);
+    console.error('Search error:', err.response?.data || err.message);
     res.status(500).json({ error: 'Failed to search for restaurants' });
-  }
-});
-
-app.get('/api/static-map', (req, res) => {
-  const { lat, lng } = req.query;
-
-  if (!lat || !lng) {
-    return res.status(400).json({ error: 'lat and lng query parameters are required' });
-  }
-
-  try {
-    const mapURL = api.getStaticMapURL(lat, lng);
-    res.json({ url: mapURL });
-  } catch (err) {
-    console.error('Static map error:', err.message);
-    res.status(500).json({ error: 'Failed to generate map URL' });
   }
 });
 

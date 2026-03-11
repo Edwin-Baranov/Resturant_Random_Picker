@@ -1,26 +1,108 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import axios from 'axios';
+import { setOptions, importLibrary } from '@googlemaps/js-api-loader';
 
-const PLACEHOLDER_IMAGE =
-  'https://as1.ftcdn.net/v2/jpg/03/07/25/60/500_F_307256093_I8qlofSMsp8E9qK1MO7lwmB5ejd01t19.jpg';
+const DEFAULT_CENTER = { lat: 40.7128, lng: -74.006 };
+const DEFAULT_ZOOM = 13;
 
 const App = () => {
   const [locationText, setLocationText] = useState('');
   const [appState, setAppState] = useState('idle');
   const [placesList, setPlacesList] = useState([]);
   const [currentSelection, setCurrentSelection] = useState(null);
-  const [imageURL, setImageURL] = useState(PLACEHOLDER_IMAGE);
   const [error, setError] = useState(null);
+  const [mapReady, setMapReady] = useState(false);
+
+  const mapRef = useRef(null);
+  const mapInstanceRef = useRef(null);
+  const markerRef = useRef(null);
+  const markerClassRef = useRef(null);
+  const infoWindowRef = useRef(null);
+
+  // Load the Maps JS API once on mount
+  useEffect(() => {
+    let cancelled = false;
+
+    async function initMap() {
+      try {
+        const { data } = await axios.get('/api/config');
+
+        setOptions({
+          key: data.mapsApiKey,
+          v: 'weekly',
+        });
+
+        const { Map } = await importLibrary('maps');
+        const { AdvancedMarkerElement } = await importLibrary('marker');
+        if (cancelled) return;
+
+        const map = new Map(mapRef.current, {
+          center: DEFAULT_CENTER,
+          zoom: DEFAULT_ZOOM,
+          mapId: 'restaurant-picker-map',
+          disableDefaultUI: false,
+          zoomControl: true,
+          mapTypeControl: false,
+          streetViewControl: true,
+          fullscreenControl: true,
+        });
+
+        mapInstanceRef.current = map;
+        markerClassRef.current = AdvancedMarkerElement;
+        setMapReady(true);
+      } catch (err) {
+        console.error('Failed to load Google Maps:', err);
+      }
+    }
+
+    initMap();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  // Update marker when selection changes
+  const updateMarker = useCallback(
+    (place) => {
+      if (!mapReady || !place) return;
+
+      const map = mapInstanceRef.current;
+      const MarkerClass = markerClassRef.current;
+      const { latitude: lat, longitude: lng } = place.location;
+      const position = { lat, lng };
+
+      // Remove previous marker
+      if (markerRef.current) {
+        markerRef.current.map = null;
+      }
+
+      // Close previous info window
+      if (infoWindowRef.current) {
+        infoWindowRef.current.close();
+      }
+
+      const marker = new MarkerClass({
+        position,
+        map,
+        title: place.displayName?.text || 'Restaurant',
+      });
+
+      const infoWindow = new google.maps.InfoWindow({
+        content: `<strong>${place.displayName?.text || ''}</strong><br/>${place.formattedAddress || ''}`,
+      });
+      marker.addListener('gmp-click', () => infoWindow.open({ map, anchor: marker }));
+
+      markerRef.current = marker;
+      infoWindowRef.current = infoWindow;
+      map.panTo(position);
+      map.setZoom(16);
+    },
+    [mapReady]
+  );
 
   useEffect(() => {
-    if (currentSelection === null) return;
-
-    const { lat, lng } = currentSelection.geometry.location;
-    axios
-      .get('/api/static-map', { params: { lat, lng } })
-      .then((res) => setImageURL(res.data.url))
-      .catch(() => setImageURL(PLACEHOLDER_IMAGE));
-  }, [currentSelection]);
+    updateMarker(currentSelection);
+  }, [currentSelection, updateMarker]);
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -55,12 +137,15 @@ const App = () => {
   }
 
   function handleOpenInMaps() {
-    const { name, vicinity, place_id } = currentSelection;
-    window.open(
-      `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-        name
-      )}%20${encodeURIComponent(vicinity)}&query_place_id=${place_id}`
-    );
+    if (currentSelection.googleMapsUri) {
+      window.open(currentSelection.googleMapsUri);
+    } else {
+      const name = currentSelection.displayName?.text || '';
+      const address = currentSelection.formattedAddress || '';
+      window.open(
+        `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(name + ' ' + address)}`
+      );
+    }
   }
 
   function handleCycle() {
@@ -86,14 +171,14 @@ const App = () => {
 
       {error && <p className="error-message">{error}</p>}
 
-      <img id="primaryDisplay" src={imageURL} alt="Restaurant location map" />
+      <div id="mapContainer" ref={mapRef} />
 
       {currentSelection && (
         <div id="currentSelection">
-          <p onClick={handleOpenInMaps}>Current Selection: {currentSelection.name}</p>
+          <p onClick={handleOpenInMaps}>Current Selection: {currentSelection.displayName?.text}</p>
           <p className="rating">
             Rating: {currentSelection.rating ?? 'N/A'} | Total ratings:{' '}
-            {currentSelection.user_ratings_total ?? 'N/A'}
+            {currentSelection.userRatingCount ?? 'N/A'}
           </p>
           <button onClick={handleCycle}>Pick Another</button>
         </div>
